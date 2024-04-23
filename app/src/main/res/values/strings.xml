@@ -47,8 +47,21 @@
 
 
 
+    <string name="welcome_to_gitfit">Welcome to GitFit</string>
+    <string name="title_git_fit">GitFit</string>
+    <string name="describe_to_gitfit">GitFit is a comprehensive companion designed to enhance your health and fitness journey. It seamlessly monitors daily activities, such as steps taken, calories burned, and active minutes, while also keeping track of your workouts, from yoga to high-intensity interval training. </string>
 
 
+
+    <string name="bmi_calculator_title">BMI Calculator</string>
+    <string name="enter_height">Enter your height (in meters):</string>
+    <string name="enter_weight">Enter your weight (in kilograms):</string>
+    <string name="height_hint">Height (m)</string>
+    <string name="weight_hint">Weight (kg)</string>
+    <string name="calculate_bmi_button">Calculate BMI</string>
+    <string name="bmi_score">Your BMI Score will appear here</string>
+    <string name="height_error">Height must be greater than 0.</string>
+    <string name="input_error">Please enter both height and weight.</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -61,6 +74,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="fragment_bmi">BMI</string>
+
+    <string name="calories_fragment_title">Calories Burned</string>
+    <string name="calories_burned_default_text">Calories Burned: 0</string>
+    <string name="log_activity_button_text">Log Activity</string>
 
     <string name="title_burned_calories">Burned Calories</string>
     <string name="title_bmi">BMI</string>
@@ -69,7 +87,7 @@
     <string name="title_account">Account</string>
     <string name="title_activity_account">Account</string>
     <string name="title_activity_account2">Account2Activity</string>
-    <!-- Strings used for fragments for navigation -->
+
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>

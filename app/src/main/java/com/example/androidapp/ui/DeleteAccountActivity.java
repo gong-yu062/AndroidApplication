@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.androidapp.R; // Adjust this import if the package name is different
+import com.example.androidapp.R;
 import com.example.androidapp.MainActivity;
 
 public class DeleteAccountActivity extends AppCompatActivity {
