@@ -7,7 +7,7 @@
     tools:context=".ui.calories.CaloriesFragment">
 
 
-    <!-- Button for logging new activities. -->
+
     <TextView
         android:id="@+id/calories_burned_text"
         android:layout_width="wrap_content"

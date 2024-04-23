@@ -12,11 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidApp"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.Account"
-            android:exported="false"
-            android:label="@string/title_activity_account"
-            android:theme="@style/Theme.AndroidApp" />
 
         <activity
             android:name=".ui.LoginActivity"
@@ -39,6 +34,15 @@
         <activity android:name=".ui.UpdateAccountActivity"
             android:label="@string/title_activity_update"
             android:exported="true"/>
+
+        <activity android:name=".ui.BMI.BMIFragment"
+            android:label="@string/bmi_calculator_title"
+            android:exported="true"/>
+
+        <activity android:name=".ui.calories.CaloriesFragment"
+            android:label="@string/calories_fragment_title"
+            android:exported="true"/>
+
 
 
 

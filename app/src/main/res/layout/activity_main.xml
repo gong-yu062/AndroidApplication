@@ -8,13 +8,12 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <!-- Main content area including Toolbar and potentially other UI elements -->
     <include
         android:id="@+id/app_bar_main"
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -24,5 +23,8 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
-</androidx.drawerlayout.widget.DrawerLayout>
 
+    <!-- Container for managing fragment navigation -->
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

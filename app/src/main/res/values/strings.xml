@@ -75,7 +75,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="fragment_bmi">BMI</string>
-
+    <string name="fragment_calories">Calories</string>
+    <string name="bmi">BMI</string>
     <string name="calories_fragment_title">Calories Burned</string>
     <string name="calories_burned_default_text">Calories Burned: 0</string>
     <string name="log_activity_button_text">Log Activity</string>

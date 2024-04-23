@@ -16,21 +16,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.view.MenuItem;
-
+import com.example.androidapp.R;
 import com.example.androidapp.databinding.ActivityMainBinding;
 import com.example.androidapp.ui.LoginActivity;
 import com.example.androidapp.ui.SignUpActivity;
-import com.example.androidapp.ui.DeleteAccountActivity;
 import com.example.androidapp.ui.UpdateAccountActivity;
 import android.content.SharedPreferences;
 import android.content.Context;
-import android.content.Intent;
 import android.app.AlertDialog;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    private NavController navController;
 
     private void logoutUser() {
         new AlertDialog.Builder(this)
@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,6 +156,14 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.action_update) {
             Intent updateIntent = new Intent(this, UpdateAccountActivity.class);
             startActivity(updateIntent);
+            return true;
+        }else if (id == R.id.action_navigation_bmi) {
+            // Use NavController to navigate to the BMI Fragment
+            navController.navigate(R.id.BMIFragment);
+            return true;
+        }else if (id == R.id.action_navigation_calories) {
+            // Use NavController to navigate to the BMI Fragment
+            navController.navigate(R.id.caloriesFragment);
             return true;
         }
 

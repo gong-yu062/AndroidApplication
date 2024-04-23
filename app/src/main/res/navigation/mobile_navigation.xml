@@ -3,19 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_bmi">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.androidapp.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_bmi"
+        android:name="com.example.androidapp.ui.BMI.BMIFragment"
+        android:label="@string/bmi"
+        tools:layout="@layout/fragment_bmi">
+        <action
+            android:id="@+id/action_navigation_bmi"
+            app:destination="@id/nav_bmi" />
+    </fragment>
+
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.androidapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_calories"
+        android:name="com.example.androidapp.ui.calories.CaloriesFragment"
+        android:label="@string/fragment_calories"
+        tools:layout="@layout/fragment_calories" >
+        <action
+            android:id="@+id/action_navigation_calories"
+            app:destination="@id/nav_calories" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_slideshow"
