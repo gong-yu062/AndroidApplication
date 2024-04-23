@@ -9,6 +9,7 @@
     <string name="action_signup">Sign Up</string>
     <string name="action_logout">Logout</string>
     <string name="action_delete">Delete Account</string>
+    <string name="action_update">Update Account</string>
     <string name="username">User Name</string>
     <string name="userpassword">Password</string>
     <string name="userloginbutton">Log in </string>
@@ -16,6 +17,7 @@
     <string name="userSignUpbutton">Sign Up </string>
     <string name="userSignUpPassword">Password</string>
     <string name="userSignUpEmail">Email</string>
+    <string name="save_changes">Save Changes</string>
 
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
@@ -24,7 +26,14 @@
     <string name="phone_number">Phone Number</string>
     <string name="weight_in_kg">Weight (kg)</string>
     <string name="height_in_cm">Height (cm)</string>
-
+    <string name="UPfirst_name">First Name</string>
+    <string name="UPlast_name">Last Name</string>
+    <string name="UPdate_of_birth">Date of Birth</string>
+    <string name="UPgender">Gender</string>
+    <string name="UPphone_number">Phone Number</string>
+    <string name="UPweight_in_kg">Weight (kg)</string>
+    <string name="UPheight_in_cm">Height (cm)</string>
+    <string name="userUpdateEmail">Email</string>
 
     <string name="confirm_logout">Are you sure you want to logout?</string>
     <string name="yes">Yes</string>
@@ -33,6 +42,7 @@
     <string name="confirm_delete_account">Are you sure you want to delete your account?</string>
     <string name="title_activity_delete">Delete account</string>
 
+    <string name="title_activity_update">Update account</string>
 
 
 

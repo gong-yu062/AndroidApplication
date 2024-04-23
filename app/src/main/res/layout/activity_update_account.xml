@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- First Name input -->
+    <EditText
+        android:id="@+id/firstNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPfirst_name"/>
+
+    <!-- Last Name input -->
+    <EditText
+        android:id="@+id/lastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPlast_name"/>
+
+    <!-- Date of Birth input -->
+    <EditText
+        android:id="@+id/dateOfBirthEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPdate_of_birth"/>
+
+    <!-- Gender input -->
+    <EditText
+        android:id="@+id/genderEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPgender"/>
+
+    <!-- Phone Number input -->
+    <EditText
+        android:id="@+id/phoneNumberEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPphone_number"
+        android:inputType="phone"/>
+
+    <!-- Weight input -->
+    <EditText
+        android:id="@+id/weightEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPweight_in_kg"
+        android:inputType="numberDecimal"/>
+
+    <!-- Height input -->
+    <EditText
+        android:id="@+id/heightEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/UPheight_in_cm"
+        android:inputType="number"/>
+
+    <!-- Email input -->
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/userUpdateEmail"
+        android:inputType="textEmailAddress" />
+
+    <!-- Button to save changes -->
+    <Button
+        android:id="@+id/buttonSaveChanges"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_changes" />
+
+</LinearLayout>

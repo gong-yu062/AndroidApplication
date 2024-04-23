@@ -21,6 +21,7 @@ import com.example.androidapp.databinding.ActivityMainBinding;
 import com.example.androidapp.ui.LoginActivity;
 import com.example.androidapp.ui.SignUpActivity;
 import com.example.androidapp.ui.DeleteAccountActivity;
+import com.example.androidapp.ui.UpdateAccountActivity;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.content.Intent;
@@ -150,7 +151,12 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.action_delete) {
             confirmAccountDeletion();
             return true;
+        }else if (id == R.id.action_update) {
+            Intent updateIntent = new Intent(this, UpdateAccountActivity.class);
+            startActivity(updateIntent);
+            return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

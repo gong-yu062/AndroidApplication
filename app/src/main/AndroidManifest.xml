@@ -36,6 +36,11 @@
             android:exported="true"/>
 
 
+        <activity android:name=".ui.UpdateAccountActivity"
+            android:label="@string/title_activity_update"
+            android:exported="true"/>
+
+
 
 
 
