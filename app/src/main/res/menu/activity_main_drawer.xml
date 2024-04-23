@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_calories"
+            android:icon="@drawable/baseline_addchart_24"
+            android:title="@string/title_burned_calories" />
+        <item
+            android:id="@+id/nav_BMI"
+            android:icon="@drawable/baseline_accessibility_new_24"
+            android:title="@string/title_bmi"
+            />
+
+        <item
+            android:id="@+id/nav_StepGoal"
+            android:icon="@drawable/baseline_add_task_24"
+            android:title="@string/title_step_goal" />
+        <item
+            android:id="@+id/nav_ActivityType"
+            android:icon="@drawable/baseline_calendar_view_month_24"
+            android:title="@string/title_activity_type" />
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/baseline_manage_accounts_24"
+            android:title="@string/title_account" />
+    </group>
+</menu>
