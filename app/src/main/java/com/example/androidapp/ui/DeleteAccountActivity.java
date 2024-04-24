@@ -1,16 +1,14 @@
 package com.example.androidapp.ui;
 
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.androidapp.R;
-import com.example.androidapp.MainActivity;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DeleteAccountActivity extends AppCompatActivity {
 
@@ -19,42 +17,33 @@ public class DeleteAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_account);
 
-        TextView textViewConfirmDeleteAccount = findViewById(R.id.textViewConfirmDeleteAccount);
-        Button buttonConfirmDeleteAccountYes = findViewById(R.id.buttonConfirmDeleteAccountYes);
-        Button buttonConfirmDeleteAccountNo = findViewById(R.id.buttonConfirmDeleteAccountNo);
+        // Get user ID from intent or wherever it's stored
+        int userId = 1; // Replace with the actual user ID
 
-        textViewConfirmDeleteAccount.setText(R.string.confirm_delete_account);
-
-        buttonConfirmDeleteAccountYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform the deletion of the account
-                deleteUserAccount();
-            }
-        });
-
-        buttonConfirmDeleteAccountNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // User chose not to delete the account, finish the activity
-                finish();
-            }
-        });
+        // Call delete user function
+        deleteUser(userId);
     }
 
-    private void deleteUserAccount() {
-        // This method should contain the logic to delete the user's account, like a call to your server.
+    private void deleteUser(int userId) {
+        String url = "https://gitfit.azurewebsites.net/api/Fit/" + userId;
 
-        // Clear any session data
-        SharedPreferences preferences = getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.apply();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url, null,
+                response -> {
+                    // Check if delete was successful
+                    Toast.makeText(DeleteAccountActivity.this, "User deleted successfully", Toast.LENGTH_SHORT).show();
+                    // Finish this activity upon successful deletion
+                    finish();
+                },
+                error -> {
+                    // Handle errors
+                    String errorMsg = "Delete user failed! Please try again.";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        errorMsg += "\nServer Response: " + new String(error.networkResponse.data);
+                    }
+                    Toast.makeText(DeleteAccountActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                });
 
-        // Redirect to a safe screen, such as the main screen or login activity, after account deletion
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish(); // Make sure to call this to close the activity
+        // Add the request to the RequestQueue.
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
 }

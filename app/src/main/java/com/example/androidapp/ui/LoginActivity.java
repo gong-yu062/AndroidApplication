@@ -6,21 +6,22 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.androidapp.R;
+import org.json.JSONException;
+import org.json.JSONObject;
+import android.text.TextUtils;
+import android.util.Log;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.androidapp.R;
-import com.android.volley.AuthFailureError;
-import java.util.HashMap;
-import java.util.Map;
-import android.util.Log;
-
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText editTextUsername;
-    EditText editTextPassword;
+    EditText emailEditText, passwordEditText;
     Button buttonLogin;
 
     @Override
@@ -28,51 +29,48 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editTextUsername = findViewById(R.id.editTextUsername);
-        editTextPassword = findViewById(R.id.editTextPassword);
+        // Initialize views
+        emailEditText = findViewById(R.id.editTextUsername);
+        passwordEditText = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
 
+        // Set up listeners
         buttonLogin.setOnClickListener(v -> attemptLogin());
     }
 
     private void attemptLogin() {
-        String url = "https://gitfit.azurewebsites.net/api/Fit/login";
+        // Check for empty fields
+        if (TextUtils.isEmpty(emailEditText.getText()) || TextUtils.isEmpty(passwordEditText.getText())) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Log.d("LoginAttempt", "URL: " + url);
-        Log.d("LoginAttempt", "Email: " + editTextUsername.getText().toString().trim());
-        Log.d("LoginAttempt", "Password: " + editTextPassword.getText().toString().trim());
+        String email = emailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        String url = "https://gitfit.azurewebsites.net/api/Fit/login?email=" + email + "&password=" + password;
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                    // Check if login was successful based on the response
+                    if (response != null && response.equals("Login Succesfull")) {
+                        // Login successful
+                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Login failed
+                        Toast.makeText(LoginActivity.this, "Login failed! Please try again.", Toast.LENGTH_SHORT).show();
+                    }
                 },
                 error -> {
-                    String errorMsg = "Login failed!";
-                    if (error.networkResponse != null) {
-                        errorMsg += " Error: " + error.networkResponse.statusCode;
-                        if (error.networkResponse.data != null) {
-                            errorMsg += " " + new String(error.networkResponse.data);
-                        }
+                    // General error message
+                    String errorMsg = "Login failed! Please try again.";
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        errorMsg += "\nServer Response: " + new String(error.networkResponse.data);
                     }
+                    Log.e("LoginActivity", errorMsg, error);
                     Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
-                }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", editTextUsername.getText().toString().trim());
-                params.put("password", editTextPassword.getText().toString().trim());
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                return headers;
-            }
-        };
+                });
 
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
 }

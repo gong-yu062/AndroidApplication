@@ -1,50 +1,89 @@
 package com.example.androidapp.ui.BMI;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.Locale; // Import the Locale class
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import com.example.androidapp.R;
-
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONObject;
 
 public class BMIFragment extends Fragment {
 
-    private EditText editTextHeight;
     private EditText editTextWeight;
-    private TextView textViewBMIScore;
+    private EditText editTextHeight;
+    private TextView textViewBMIResult;
+    private Button buttonCalculateBMI;
 
-    // ... Your other methods ...
+    public BMIFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_bmi, container, false);
-
-        // Initialize your EditTexts and TextView here
-        editTextHeight = view.findViewById(R.id.editTextHeight);
-        editTextWeight = view.findViewById(R.id.editTextWeight);
-        textViewBMIScore = view.findViewById(R.id.textViewBMIScore);
-
-        // Set up the button click listener if not using android:onClick in XML
-        view.findViewById(R.id.buttonCalculateBMI).setOnClickListener(v -> {
-            onCalculateBMIClicked();
-        });
-
-        return view;
+        return inflater.inflate(R.layout.fragment_bmi, container, false);
     }
 
-    public void onCalculateBMIClicked() {
-        // Use editTextHeight, editTextWeight, and textViewBMIScore here to calculate BMI
-        String heightStr = editTextHeight.getText().toString();
-        String weightStr = editTextWeight.getText().toString();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // ... Rest of your BMI calculation logic ...
 
+        textViewBMIResult = view.findViewById(R.id.textViewBMIResult);
+        buttonCalculateBMI = view.findViewById(R.id.buttonCalculateBMI);
+
+        buttonCalculateBMI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FetchBMIFromAPI().execute("https://gitfit.azurewebsites.net/api/Fit/bmi/12");
+            }
+        });
+    }
+
+    private class FetchBMIFromAPI extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response = "";
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+                br.close();
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                double bmi = jsonObject.getDouble("Bmi");
+                textViewBMIResult.setText(String.format("Your BMI: %.2f", bmi));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
-
