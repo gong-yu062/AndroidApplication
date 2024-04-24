@@ -8,7 +8,7 @@
     android:padding="16dp"
     tools:context=".ui.type.ActivityTypeFragment">
 
-    <!-- Title TextView -->
+
     <TextView
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
         android:layout_gravity="center_horizontal"
         />
 
-    <!-- RecyclerView for displaying a list of types -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewTypes"
         android:layout_width="match_parent"

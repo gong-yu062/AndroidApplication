@@ -10,7 +10,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_delete">Delete Account</string>
     <string name="action_update">Update Account</string>
-    <string name="username">User Name</string>
+    <string name="username">User email</string>
     <string name="userpassword">Password</string>
     <string name="userloginbutton">Log in </string>
     <string name="title_activity_signup">Sign Up</string>
