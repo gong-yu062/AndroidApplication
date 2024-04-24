@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_calories, R.id.nav_slideshow, R.id.nav_bmi)
+                R.id.nav_home, R.id.nav_calories, R.id.nav_goal,R.id.nav_type, R.id.nav_bmi)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -164,6 +164,18 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.action_navigation_calories) {
             // Use NavController to navigate to the BMI Fragment
             navController.navigate(R.id.caloriesFragment);
+            return true;
+        }else if (id == R.id.action_navigation_goal) {
+            // Use NavController to navigate to the BMI Fragment
+            navController.navigate(R.id.goalFragment);
+            return true;
+        }else if (id == R.id.action_navigation_type) {
+            // Use NavController to navigate to the BMI Fragment
+            navController.navigate(R.id.activityTypeFragment);
+            return true;
+        }else if (id == R.id.action_navigation_home) {
+            // Use NavController to navigate to the BMI Fragment
+            navController.navigate(R.id.homeFragment);
             return true;
         }
 

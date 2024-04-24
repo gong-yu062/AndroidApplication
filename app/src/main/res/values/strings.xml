@@ -43,15 +43,29 @@
     <string name="title_activity_delete">Delete account</string>
 
     <string name="title_activity_update">Update account</string>
+    <string name="title_home">Home</string>
 
 
+    <string name="hint_enter_steps">Enter your daily steps goal</string>
+    <string name="action_set_goal">Set Goal</string>
 
+    <string-array name="activity_types_array">
+        <item>Walking</item>
+        <item>Running</item>
+        <item>Cycling</item>
 
+    </string-array>
     <string name="welcome_to_gitfit">Welcome to GitFit</string>
     <string name="title_git_fit">GitFit</string>
     <string name="describe_to_gitfit">GitFit is a comprehensive companion designed to enhance your health and fitness journey. It seamlessly monitors daily activities, such as steps taken, calories burned, and active minutes, while also keeping track of your workouts, from yoga to high-intensity interval training. </string>
-
-
+    <string name="fragment_type">Activity Type</string>
+    <string name="fragment_goal">Step Goal</string>
+    <string name="fragment_home">Home</string>
+    <string name="setGoal">Please set up your goals</string>
+    <string name="SetGoalButton">Set Goal</string>
+    <string name="InputGoal">Enter your daily steps goal</string>
+    <string name="title_select_type">Select a Type</string>
+    <string name="action_confirm_selection">Confirm Selection</string>
 
     <string name="bmi_calculator_title">BMI Calculator</string>
     <string name="enter_height">Enter your height (in meters):</string>

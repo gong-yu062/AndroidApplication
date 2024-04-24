@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/baseline_bedtime_24"
+            android:title="@string/title_home" />
+        <item
             android:id="@+id/nav_calories"
             android:icon="@drawable/baseline_addchart_24"
             android:title="@string/title_burned_calories" />

@@ -6,6 +6,16 @@
     app:startDestination="@+id/nav_bmi">
 
     <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.androidapp.ui.home.HomeFragment"
+        android:label="@string/fragment_home"
+        tools:layout="@layout/fragment_home">
+    <action
+        android:id="@+id/action_navigation_home"
+        app:destination="@id/nav_home" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_bmi"
         android:name="com.example.androidapp.ui.BMI.BMIFragment"
         android:label="@string/bmi"
@@ -27,8 +37,27 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.androidapp.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_type"
+        android:name="com.example.androidapp.ui.type.ActivityTypeFragment"
+        android:label="@string/fragment_type"
+        tools:layout="@layout/fragment_type" >
+        <action
+            android:id="@+id/action_navigation_type"
+            app:destination="@id/nav_type" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_goal"
+        android:name="com.example.androidapp.ui.goal.GoalFragment"
+        android:label="@string/fragment_goal"
+        tools:layout="@layout/fragment_goal" >
+        <action
+            android:id="@+id/action_navigation_goal"
+            app:destination="@id/nav_goal" />
+    </fragment>
+
+
+
+
+
 </navigation>
