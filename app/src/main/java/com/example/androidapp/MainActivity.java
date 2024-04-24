@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.view.MenuItem;
-import com.example.androidapp.R;
+
 import com.example.androidapp.databinding.ActivityMainBinding;
 import com.example.androidapp.ui.LoginActivity;
 import com.example.androidapp.ui.SignUpActivity;
