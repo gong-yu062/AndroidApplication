@@ -14,6 +14,8 @@ import com.example.androidapp.R;
 import com.android.volley.AuthFailureError;
 import java.util.HashMap;
 import java.util.Map;
+import android.util.Log;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,17 +38,21 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptLogin() {
         String url = "https://gitfit.azurewebsites.net/api/Fit/login";
 
+        Log.d("LoginAttempt", "URL: " + url);
+        Log.d("LoginAttempt", "Email: " + editTextUsername.getText().toString().trim());
+        Log.d("LoginAttempt", "Password: " + editTextPassword.getText().toString().trim());
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {
-                    // Handle the response from the server here.
                     Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
                 },
                 error -> {
-                    // Handle error more comprehensively
                     String errorMsg = "Login failed!";
                     if (error.networkResponse != null) {
                         errorMsg += " Error: " + error.networkResponse.statusCode;
-                        errorMsg += " " + new String(error.networkResponse.data);
+                        if (error.networkResponse.data != null) {
+                            errorMsg += " " + new String(error.networkResponse.data);
+                        }
                     }
                     Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 }) {
@@ -68,5 +74,5 @@ public class LoginActivity extends AppCompatActivity {
 
         Volley.newRequestQueue(this).add(stringRequest);
     }
-}
 
+}

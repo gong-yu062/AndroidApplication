@@ -6,8 +6,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.androidapp.R;
@@ -80,13 +78,18 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 },
                 error -> {
-                    // Signup failed due to network issues or server error
+                    // General error message
                     String errorMsg = "Sign up failed! Please try again.";
-                    if (error.networkResponse != null && error.networkResponse.data != null) {
-                        errorMsg += "\nServer Response: " + new String(error.networkResponse.data);
+                    if (error.networkResponse != null) {
+                        if (error.networkResponse.statusCode == 409) {
+                            errorMsg = "This email address is already registered. Please use a different email or reset your password.";
+                        } else if (error.networkResponse.data != null) {
+                            errorMsg += "\nServer Response: " + new String(error.networkResponse.data);
+                        }
                     }
                     Toast.makeText(SignUpActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 });
+
 
         Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
