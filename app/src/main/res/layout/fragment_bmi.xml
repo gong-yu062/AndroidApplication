@@ -13,10 +13,11 @@
         android:text="@string/enter_height"
         android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
+    <EditText
         android:id="@+id/editTextHeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
         android:hint="@string/height_hint" />
 
     <TextView
@@ -25,10 +26,11 @@
         android:text="@string/enter_weight"
         android:textAppearance="?attr/textAppearanceListItem" />
 
-    <TextView
+    <EditText
         android:id="@+id/editTextWeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
         android:hint="@string/weight_hint" />
 
     <Button

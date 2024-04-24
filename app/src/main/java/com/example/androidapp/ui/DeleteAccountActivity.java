@@ -1,14 +1,14 @@
 package com.example.androidapp.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.androidapp.MainActivity;
 import com.example.androidapp.R;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class DeleteAccountActivity extends AppCompatActivity {
 
@@ -31,8 +31,9 @@ public class DeleteAccountActivity extends AppCompatActivity {
                 response -> {
                     // Check if delete was successful
                     Toast.makeText(DeleteAccountActivity.this, "User deleted successfully", Toast.LENGTH_SHORT).show();
-                    // Finish this activity upon successful deletion
-                    finish();
+                    // Start MainActivity upon successful deletion
+                    Intent intent = new Intent(DeleteAccountActivity.this, MainActivity.class);
+                    startActivity(intent);
                 },
                 error -> {
                     // Handle errors

@@ -13,11 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 public class LoginActivity extends AppCompatActivity {
 
