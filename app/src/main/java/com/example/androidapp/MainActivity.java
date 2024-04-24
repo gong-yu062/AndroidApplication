@@ -16,7 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.view.MenuItem;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8ec8c01bbc8d5e6835a9889946736655be15d66a
 import com.example.androidapp.databinding.ActivityMainBinding;
 import com.example.androidapp.ui.LoginActivity;
 import com.example.androidapp.ui.SignUpActivity;
@@ -25,12 +28,28 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import android.app.AlertDialog;
 
+import android.widget.TextView;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import android.util.Log;
+import com.google.gson.*;
+import com.android.volley.*;
+import com.android.volley.toolbox.*;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
     private NavController navController;
+
+
+
+
+
+
+
 
     private void logoutUser() {
         new AlertDialog.Builder(this)
@@ -132,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
