@@ -1,20 +1,30 @@
 package com.example.androidapp.ui;
-
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.androidapp.R;
-import org.json.JSONException;
-import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
-
+import com.example.androidapp.R;
+import android.os.Bundle;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import android.text.TextUtils;
+import android.util.Log;
+import android.net.Uri;  // Correct import for Uri
+import java.nio.charset.StandardCharsets;
+import org.json.JSONObject;
+import org.json.JSONException;
+import com.android.volley.toolbox.JsonObjectRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
-        // Check for empty fields
         if (TextUtils.isEmpty(emailEditText.getText()) || TextUtils.isEmpty(passwordEditText.getText())) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
@@ -45,29 +54,51 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
-        String url = "https://gitfit.azurewebsites.net/api/Fit/login?email=" + email + "&password=" + password;
+        String url = "https://gitfit.azurewebsites.net/api/Fit/login";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put("email", email);
+            jsonObj.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObj,
                 response -> {
-                    // Check if login was successful based on the response
-                    if (response != null && response.equals("Login Succesfull")) {
-                        // Login successful
-                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // Login failed
-                        Toast.makeText(LoginActivity.this, "Login failed! Please try again.", Toast.LENGTH_SHORT).show();
+                    // Check response as per your backend response
+                    try {
+                        if ("Login Succesfull".equalsIgnoreCase(response.getString("message").trim())) {
+                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Login failed! Please try again.", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(LoginActivity.this, "Error parsing response!", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
-                    // General error message
                     String errorMsg = "Login failed! Please try again.";
-                    if (error.networkResponse != null && error.networkResponse.data != null) {
-                        errorMsg += "\nServer Response: " + new String(error.networkResponse.data);
+                    // Check if there is a network response
+                    if (error.networkResponse != null) {
+                        // Log status code to see if there's a HTTP error
+                        Log.e("LoginActivity", "Error status code: " + error.networkResponse.statusCode);
+
+                        // Attempt to retrieve the body of the error response
+                        String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("LoginActivity", "Error body: " + responseBody);
+
+                        // Append the detailed error message to the toast message
+                        errorMsg += "\nError Code: " + error.networkResponse.statusCode + "\nError Body: " + responseBody;
+                    } else {
+                        // If there's no network response (e.g., timeout or no internet), log the volley error
+                        Log.e("LoginActivity", "Volley error: " + error.toString());
                     }
-                    Log.e("LoginActivity", errorMsg, error);
                     Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 });
 
-        Volley.newRequestQueue(this).add(stringRequest);
+        Volley.newRequestQueue(this).add(jsonObjectRequest);
     }
+
 }
