@@ -38,7 +38,9 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="title_activity_logout">Abmelden</string>
-    <string name="confirm_delete_account">Sind sie sich sicher ?</string>
+    <string name="title_select_type">Wahlen Sie ein Typ aus</string>
+    <string name="action_confirm_selection">Bestatigen Sie Ihre Wahl</string>
+    <string name="confirm_delete_account">"Sind sie sich sicher "</string>
     <string name="title_activity_delete">Profil Löschen</string>
     <string name="title_activity_update">Profil Aktuelisieren</string>
     <string name="title_home">Wilkommen</string>

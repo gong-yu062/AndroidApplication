@@ -30,9 +30,9 @@
             android:label="@string/title_activity_signup"
             android:exported="true"/>
 
-        <activity android:name=".ui.DeleteAccountActivity"
-            android:label="@string/title_activity_delete"
-            android:exported="true"/>
+       <activity android:name=".ui.DeleteActivity"
+           android:label="@string/action_delete"
+           android:exported="true"/>
 
 
         <activity android:name=".ui.UpdateAccountActivity"

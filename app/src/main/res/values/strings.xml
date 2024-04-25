@@ -39,12 +39,13 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="title_activity_logout">Log out</string>
-    <string name="confirm_delete_account">Are you sure you want to delete your account?</string>
-    <string name="title_activity_delete">Delete account</string>
 
+    <string name="title_select_type">Select a Type</string>
+    <string name="action_confirm_selection">Confirm Selection</string>
     <string name="title_activity_update">Update account</string>
     <string name="title_home">Home</string>
-
+    <string name="hint_enter_id">Enter ID to delete</string>
+    <string name="button_delete">Delete</string>
 
     <string name="hint_enter_steps">Enter your daily steps goal</string>
     <string name="action_set_goal">Set Goal</string>
@@ -64,8 +65,6 @@
     <string name="setGoal">Please set up your goals</string>
     <string name="SetGoalButton">Set Goal</string>
     <string name="InputGoal">Enter your daily steps goal</string>
-    <string name="title_select_type">Select a Type</string>
-    <string name="action_confirm_selection">Confirm Selection</string>
 
     <string name="bmi_calculator_title">BMI Calculator</string>
     <string name="enter_height">Enter your height (in meters):</string>
@@ -78,7 +77,7 @@
     <string name="input_error">Please enter both height and weight.</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -144,6 +143,8 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="title_activity_delete">delete account</string>
+    <string name="confirm_delete_account">Are you sure</string>
 
 
 </resources>

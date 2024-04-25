@@ -21,6 +21,7 @@ import com.example.androidapp.databinding.ActivityMainBinding;
 import com.example.androidapp.ui.LoginActivity;
 import com.example.androidapp.ui.SignUpActivity;
 import com.example.androidapp.ui.UpdateAccountActivity;
+import com.example.androidapp.ui.DeleteActivity;
 import android.content.SharedPreferences;
 import android.content.Context;
 import android.app.AlertDialog;
@@ -165,12 +166,14 @@ public class MainActivity extends AppCompatActivity {
             // Handle log out
             logoutUser();
             return true;
-        }else if (id == R.id.action_delete) {
-            confirmAccountDeletion();
-            return true;
+
         }else if (id == R.id.action_update) {
             Intent updateIntent = new Intent(this, UpdateAccountActivity.class);
             startActivity(updateIntent);
+            return true;
+        }else if (id == R.id.action_delete) {
+            Intent deleteIntent = new Intent(this, DeleteActivity.class);
+            startActivity(deleteIntent);
             return true;
         }else if (id == R.id.action_navigation_bmi) {
             // Use NavController to navigate to the BMI Fragment
