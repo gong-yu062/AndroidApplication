@@ -5,44 +5,40 @@ import android.widget.EditText;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.AuthFailureError;
-
-import org.json.JSONObject;
-import org.json.JSONException;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.nio.charset.StandardCharsets;
 import android.text.TextUtils;
 import android.util.Log;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.Network;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.example.androidapp.R;
 import com.example.androidapp.ToastManager;
-import com.android.volley.DefaultRetryPolicy;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 
 public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private Button buttonLogin;
     private RequestQueue requestQueue;
-
-    private ToastManager toastManager;
+    private ToastManager toastManager; // Make sure to initialize this correctly
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        toastManager = new ToastManager(); // Ensure ToastManager is correctly initialized in your project
-
+        toastManager = new ToastManager(); // This may need to take 'this' as a parameter, depending on your implementation
         requestQueue = Volley.newRequestQueue(this);
         emailEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
@@ -53,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void attemptLogin() {
         if (!isNetworkAvailable()) {
-            toastManager.showToast(LoginActivity.this, "No internet connection");
+            toastManager.showToast(this, "No internet connection");
             return;
         }
 
@@ -61,29 +57,17 @@ public class LoginActivity extends AppCompatActivity {
         final String password = passwordEditText.getText().toString().trim();
 
         if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            toastManager.showToast(LoginActivity.this, "Please fill in all fields");
+            toastManager.showToast(this, "Please fill in all fields");
             return;
         }
 
-        String url = "https://gitfit.azurewebsites.net/api/Fit/login";
+        String url = "https://gitfit.azurewebsites.net/api/Fit/login?email=" + email + "&password=" + password;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Handle success
-                        handleSuccess(new JSONObject()); // Assuming the response is just a success message, not JSON
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        handleError(error);
-                    }
-                }) {
+                response -> handleSuccess(),
+                this::handleError
+        ) {
             @Override
             protected Map<String, String> getParams() {
-                // Set your post request params in the form of key-value pairs here
                 Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
@@ -98,41 +82,49 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000, // 20 seconds timeout
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
         requestQueue.add(stringRequest);
     }
 
-    private void handleSuccess(JSONObject response) {
-        String message = "Login successful!";
-        toastManager.showToast(LoginActivity.this, message);
+    private void handleSuccess() {
+        toastManager.showToast(this, "Login successful!");
     }
+
+
 
     private void handleError(VolleyError error) {
-        String message = "Network error";
         if (error.networkResponse != null) {
-            if (error.networkResponse.statusCode == 404) {
-                message = "Server endpoint not found";
-            } else {
-                String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                Log.e("LoginActivity", "Server Response: " + responseBody);
-                message = parseErrorMessage(responseBody);
-            }
+            String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+            Log.e("LoginActivity", "Error Response: " + responseBody);
+            // Parse error message and display it
+            String errorMessage = parseErrorMessage(responseBody);
+            runOnUiThread(() -> toastManager.showToast(this, errorMessage));
+        } else {
+            // General error like timeout or no connection
+            runOnUiThread(() -> toastManager.showToast(this, "An error occurred"));
         }
-        toastManager.showToast(LoginActivity.this, message);
     }
 
+
     private String parseErrorMessage(String responseBody) {
+        String message = "Error: ";
         try {
             JSONObject jsonObject = new JSONObject(responseBody);
-            return jsonObject.optString("message", "Error processing the request");
+            JSONObject errorsObject = jsonObject.optJSONObject("errors");
+            if (errorsObject != null) {
+                if (errorsObject.has("email")) {
+                    JSONArray emailErrors = errorsObject.getJSONArray("email");
+                    message += "Email: " + emailErrors.getString(0) + "\n";
+                }
+                if (errorsObject.has("password")) {
+                    JSONArray passwordErrors = errorsObject.getJSONArray("password");
+                    message += "Password: " + passwordErrors.getString(0);
+                }
+            }
         } catch (JSONException e) {
             Log.e("LoginActivity", "Error parsing server response", e);
-            return "Error parsing server response";
+            message += "Error parsing server response.";
         }
+        return message;
     }
 
     private boolean isNetworkAvailable() {
