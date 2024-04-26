@@ -1,104 +1,144 @@
 package com.example.androidapp.ui;
+
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import android.text.TextUtils;
-import android.util.Log;
-import com.example.androidapp.R;
-import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.Button;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import android.text.TextUtils;
-import android.util.Log;
-import android.net.Uri;  // Correct import for Uri
-import java.nio.charset.StandardCharsets;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.AuthFailureError;
+
 import org.json.JSONObject;
 import org.json.JSONException;
-import com.android.volley.toolbox.JsonObjectRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import android.text.TextUtils;
+import android.util.Log;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.Network;
+
+import com.example.androidapp.R;
+import com.example.androidapp.ToastManager;
+import com.android.volley.DefaultRetryPolicy;
 
 public class LoginActivity extends AppCompatActivity {
+    private EditText emailEditText, passwordEditText;
+    private Button buttonLogin;
+    private RequestQueue requestQueue;
 
-    EditText emailEditText, passwordEditText;
-    Button buttonLogin;
+    private ToastManager toastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Initialize views
+        toastManager = new ToastManager(); // Ensure ToastManager is correctly initialized in your project
+
+        requestQueue = Volley.newRequestQueue(this);
         emailEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);
         buttonLogin = findViewById(R.id.buttonLogin);
 
-        // Set up listeners
         buttonLogin.setOnClickListener(v -> attemptLogin());
     }
 
     private void attemptLogin() {
-        if (TextUtils.isEmpty(emailEditText.getText()) || TextUtils.isEmpty(passwordEditText.getText())) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+        if (!isNetworkAvailable()) {
+            toastManager.showToast(LoginActivity.this, "No internet connection");
             return;
         }
 
-        String email = emailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
+        final String email = emailEditText.getText().toString().trim();
+        final String password = passwordEditText.getText().toString().trim();
 
-        String url = "https://gitfit.azurewebsites.net/api/Fit/login";
-
-        JSONObject jsonObj = new JSONObject();
-        try {
-            jsonObj.put("email", email);
-            jsonObj.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            toastManager.showToast(LoginActivity.this, "Please fill in all fields");
+            return;
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, jsonObj,
-                response -> {
-                    // Check response as per your backend response
-                    try {
-                        if ("Login Succesfull".equalsIgnoreCase(response.getString("message").trim())) {
-                            Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Login failed! Please try again.", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "Error parsing response!", Toast.LENGTH_SHORT).show();
+        String url = "https://gitfit.azurewebsites.net/api/Fit/login";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle success
+                        handleSuccess(new JSONObject()); // Assuming the response is just a success message, not JSON
                     }
                 },
-                error -> {
-                    String errorMsg = "Login failed! Please try again.";
-                    // Check if there is a network response
-                    if (error.networkResponse != null) {
-                        // Log status code to see if there's a HTTP error
-                        Log.e("LoginActivity", "Error status code: " + error.networkResponse.statusCode);
-
-                        // Attempt to retrieve the body of the error response
-                        String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                        Log.e("LoginActivity", "Error body: " + responseBody);
-
-                        // Append the detailed error message to the toast message
-                        errorMsg += "\nError Code: " + error.networkResponse.statusCode + "\nError Body: " + responseBody;
-                    } else {
-                        // If there's no network response (e.g., timeout or no internet), log the volley error
-                        Log.e("LoginActivity", "Volley error: " + error.toString());
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        handleError(error);
                     }
-                    Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
-                });
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Set your post request params in the form of key-value pairs here
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
 
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                return headers;
+            }
+        };
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000, // 20 seconds timeout
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(stringRequest);
     }
 
+    private void handleSuccess(JSONObject response) {
+        String message = "Login successful!";
+        toastManager.showToast(LoginActivity.this, message);
+    }
+
+    private void handleError(VolleyError error) {
+        String message = "Network error";
+        if (error.networkResponse != null) {
+            if (error.networkResponse.statusCode == 404) {
+                message = "Server endpoint not found";
+            } else {
+                String responseBody = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                Log.e("LoginActivity", "Server Response: " + responseBody);
+                message = parseErrorMessage(responseBody);
+            }
+        }
+        toastManager.showToast(LoginActivity.this, message);
+    }
+
+    private String parseErrorMessage(String responseBody) {
+        try {
+            JSONObject jsonObject = new JSONObject(responseBody);
+            return jsonObject.optString("message", "Error processing the request");
+        } catch (JSONException e) {
+            Log.e("LoginActivity", "Error parsing server response", e);
+            return "Error parsing server response";
+        }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        Network network = connectivityManager.getActiveNetwork();
+        NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+        return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+    }
 }

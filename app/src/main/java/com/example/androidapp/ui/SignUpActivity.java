@@ -124,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
         };
 
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000, // 20 seconds timeout
+                30000, // 30 seconds timeout
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
