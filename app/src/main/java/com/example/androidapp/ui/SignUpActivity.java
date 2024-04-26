@@ -1,7 +1,7 @@
 package com.example.androidapp.ui;
 import android.util.Log;
 
-
+import com.android.volley.RequestQueue;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Button;
@@ -15,8 +15,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.text.TextUtils;
 import com.example.androidapp.ToastManager;
+import com.android.volley.DefaultRetryPolicy;
 
 import java.nio.charset.StandardCharsets;
+
+import com.android.volley.AuthFailureError;
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -25,12 +31,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     private ToastManager toastManager;
 
+    private RequestQueue requestQueue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         // Initialize ToastManager
         toastManager = new ToastManager();
+
+        requestQueue = Volley.newRequestQueue(this);
         // Initialize views
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
@@ -47,7 +57,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void attemptSignUp() {
-        // Check for empty fields
         if (TextUtils.isEmpty(firstNameEditText.getText()) || TextUtils.isEmpty(lastNameEditText.getText()) ||
                 TextUtils.isEmpty(dateOfBirthEditText.getText()) || TextUtils.isEmpty(genderEditText.getText()) ||
                 TextUtils.isEmpty(weightEditText.getText()) || TextUtils.isEmpty(heightEditText.getText()) ||
@@ -56,60 +65,69 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-
         JSONObject params = new JSONObject();
         try {
             params.put("Firstname", firstNameEditText.getText().toString().trim());
             params.put("Lastname", lastNameEditText.getText().toString().trim());
-            params.put("dateOfBirth", dateOfBirthEditText.getText().toString().trim());
             params.put("Gender", genderEditText.getText().toString().trim());
             params.put("weight", Integer.parseInt(weightEditText.getText().toString().trim()));
             params.put("height", Integer.parseInt(heightEditText.getText().toString().trim()));
             params.put("Email", emailEditText.getText().toString().trim());
             params.put("Password", passwordEditText.getText().toString().trim());
+            params.put("DateOfBirth", dateOfBirthEditText.getText().toString().trim()); // Directly use the input string
         } catch (JSONException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+            Log.e("SignUpActivity", "JSON Exception", e);
+            toastManager.showToast(this, "An error occurred with data formatting. Please try again.");
             return;
         }
+
         // Log the JSON payload
         Log.d("SignUpActivity", "JSON Payload: " + params.toString());
 
         // Send the request
         String url = "https://gitfit.azurewebsites.net/api/Fit/signup";
-
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params,
                 response -> {
                     try {
-                        // Assuming the server sends a status in the JSON response
-                        boolean isSuccess = response.optBoolean("success", false);  // Make sure server sends this or change according to actual response
-                        String message = response.optString("message", "Sign up successful!");  // Same here, adjust according to server response
-                        if (isSuccess) {
-                            Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
-                            // Maybe navigate to login screen or main activity
-                        } else {
-                            Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
-                        }
+                        boolean isSuccess = response.optBoolean("success", false);
+                        String message = response.optString("message", "Sign up successful!");
+                        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(SignUpActivity.this, "Response parsing error", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
-                        String errorMsg = "Sign up failed! Please try again.";
-                        if (error.networkResponse != null && error.networkResponse.data != null) {
-                            String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
-                            try {
-                                JSONObject jsonObject = new JSONObject(responseData);
-                                String serverError = jsonObject.optString("error", "No specific error message provided.");
-                                errorMsg += "\nServer Response: " + serverError;
-                            } catch (JSONException e) {
-                                errorMsg += "\nServer Response: " + responseData;  // Fallback if not JSON
-                            }
+                    Log.e("SignUpActivity", "Error: " + error.toString());
+                    if (error.networkResponse != null && error.networkResponse.data != null) {
+                        String responseData = new String(error.networkResponse.data, StandardCharsets.UTF_8);
+                        Log.e("SignUpActivity", "Server Response: " + responseData);
+                        try {
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            String serverMessage = jsonObject.optString("message", "No message provided");
+                            toastManager.showToast(this, "Error: " + serverMessage);
+                        } catch (JSONException e) {
+                            toastManager.showToast(this, "Error parsing server response");
                         }
-                        toastManager.showToast(SignUpActivity.this, errorMsg);
-                    });
+                    } else {
+                        toastManager.showToast(this, "Client error with no server response");
+                    }
 
-        Volley.newRequestQueue(this).add(jsonObjectRequest);
+
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                return headers;
+            }
+        };
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000, // 20 seconds timeout
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(jsonObjectRequest);
     }
 }
