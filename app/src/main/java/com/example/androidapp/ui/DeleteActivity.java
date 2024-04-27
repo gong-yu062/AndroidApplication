@@ -45,13 +45,13 @@ public class DeleteActivity extends AppCompatActivity {
 
     private void deleteUser(String id) {
 
-        // URL to your backend API, replace with your actual URL and append the id to delete
+
         String url = "https://gitfit.azurewebsites.net/api/Fit/" + id;
 
-// Initialize a new request queue instance
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-// Create a new string request
+
         StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
@@ -63,12 +63,12 @@ public class DeleteActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Handle the error response here
+
                         Toast.makeText(DeleteActivity.this, "Error deleting user: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
-                // Add the request to the Volley request queue
+
                         requestQueue.add(stringRequest);
 
     }

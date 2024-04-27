@@ -31,14 +31,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private Button buttonLogin;
     private RequestQueue requestQueue;
-    private ToastManager toastManager; // Make sure to initialize this correctly
+    private ToastManager toastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        toastManager = new ToastManager(); // This may need to take 'this' as a parameter, depending on your implementation
+        toastManager = new ToastManager();
         requestQueue = Volley.newRequestQueue(this);
         emailEditText = findViewById(R.id.editTextUsername);
         passwordEditText = findViewById(R.id.editTextPassword);

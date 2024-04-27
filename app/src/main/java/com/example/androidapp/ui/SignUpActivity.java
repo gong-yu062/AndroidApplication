@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity {
             params.put("height", Integer.parseInt(heightEditText.getText().toString().trim()));
             params.put("Email", emailEditText.getText().toString().trim());
             params.put("Password", passwordEditText.getText().toString().trim());
-            params.put("DateOfBirth", dateOfBirthEditText.getText().toString().trim()); // Directly use the input string
+            params.put("DateOfBirth", dateOfBirthEditText.getText().toString().trim());
         } catch (JSONException e) {
             Log.e("SignUpActivity", "JSON Exception", e);
             toastManager.showToast(this, "An error occurred with data formatting. Please try again.");
@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Log the JSON payload
         Log.d("SignUpActivity", "JSON Payload: " + params.toString());
 
-        // Send the request
+
         String url = "https://gitfit.azurewebsites.net/api/Fit/signup";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, params,
                 response -> {
