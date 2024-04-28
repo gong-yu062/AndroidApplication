@@ -15,7 +15,6 @@ public class LogoutActivity extends AppCompatActivity {
 
         Button yesButton = findViewById(R.id.buttonConfirmLogoutYes);
         Button noButton = findViewById(R.id.buttonConfirmLogoutNo);
-
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
